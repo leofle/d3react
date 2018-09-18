@@ -3,7 +3,6 @@ import * as d3 from 'd3'
 import { scaleOrdinal } from 'd3-scale';
 import Links from './Links';
 import Nodes from './Nodes';
-import { selectAll } from 'd3-selection';
 
 export default class Graph extends Component {
 
@@ -15,7 +14,8 @@ export default class Graph extends Component {
 	componentDidMount() {
 		let svg = d3.select("svg"),
 			width = +svg.attr("width"),
-			height = +svg.attr("height");
+			height = +svg.attr("height"),
+			radius = 5;
 
 		// svg
 		// .attr("preserveAspectRatio", "xMinYMin meet")
@@ -31,7 +31,9 @@ export default class Graph extends Component {
 			.strength(.05)
 			.id(function (d) { return d.id; }))
 			.force("charge", d3.forceManyBody().strength(-90))
-			.force("center", d3.forceCenter(width / 2, height / 2));
+			.force("center", d3.forceCenter(width / 2, height / 2))
+			.force('collide', d3.forceCollide([radius])
+			.iterations(20))
 
 		d3.json("flare.json").then(graph => {
 
@@ -60,8 +62,10 @@ export default class Graph extends Component {
 				.data(nodes.filter(function (d) { return d.id; }))
 				.enter().append("circle")
 				.attr("class", "node")
-				.attr("r", 5)
+				.attr("r", function (d) { return d.id.length })
 				.attr("fill", function (d) { return color(d.group); })
+				.on("click", clickNode)
+				.on('mouseover', mouseOver)
 				.call(d3.drag()
 					.on("start", dragstarted)
 					.on("drag", dragged)
@@ -84,6 +88,14 @@ export default class Graph extends Component {
 			
 		});
 
+		function clickNode() {
+			d3.select(this)
+				.style("fill","lightcoral")
+				.style("stroke","red");
+		}
+		function mouseOver(){
+			d3.select(this).style('fill','black');
+		}
 		function positionLink(d) {
 			return "M" + d[0].x + "," + d[0].y
 				+ "S" + d[1].x + "," + d[1].y
@@ -106,7 +118,8 @@ export default class Graph extends Component {
 		}
 
 		function dragended(d) {
-			if (!d3.event.active) simulation.alphaTarget(0).resume();
+			d3.event.subject.active = false;
+			if (!d3.event.active) simulation.alphaTarget(0);
 			d.fx = null;
 			d.fy = null;
 		}
