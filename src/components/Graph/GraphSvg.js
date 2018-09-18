@@ -10,6 +10,9 @@ export default class Graph extends Component {
 		width: window.innerWidth,
 		height: window.innerHeight
 	}
+	componentWillMount() {
+		window.addEventListener('resize', this.resizeCanvas);
+	}
 
 	componentDidMount() {
 		let svg = d3.select("svg"),
@@ -24,16 +27,16 @@ export default class Graph extends Component {
 		let color = scaleOrdinal()
 			.range(['green', 'blue', 'pink', 'red', 'black', 'yellow', 'orange', 'purple', 'cyan']);
 
-			
+
 		let simulation = d3.forceSimulation()
 			.force("link", d3.forceLink()
-			.distance(10)
-			.strength(.05)
-			.id(function (d) { return d.id; }))
+				.distance(10)
+				.strength(.05)
+				.id(function (d) { return d.id; }))
 			.force("charge", d3.forceManyBody().strength(-90))
 			.force("center", d3.forceCenter(width / 2, height / 2))
 			.force('collide', d3.forceCollide([radius])
-			.iterations(20))
+				.iterations(20));
 
 		d3.json("flare.json").then(graph => {
 
@@ -51,28 +54,42 @@ export default class Graph extends Component {
 				bilinks.push([s, i, t]);
 			});
 
+
 			let link = svg.select("g.links")
-			.selectAll("link")
+				.selectAll("link")
 				.data(bilinks)
 				.enter().append("path")
 				.attr("class", "link");
 
 			let node = svg.select("g.nodes")
-			.selectAll("circle")
+				.selectAll("node")
 				.data(nodes.filter(function (d) { return d.id; }))
-				.enter().append("circle")
+				.enter().append("g");
+
+			node
+				.append("circle")
 				.attr("class", "node")
 				.attr("r", function (d) { return d.id.length })
-				.attr("fill", function (d) { return color(d.group); })
+				.attr("fill", function (d) { return color(d.group); });
+
+			node
+				.append("text")
+				.attr("class", "nodetext")
+				.attr("x", function (d) { return d.id.length * -2})
+				.attr("y", function (d) { return d.id.length * 2 + 5})
+				.attr("text-achor", "middle")
+				.attr("stroke", '#000')
+				.attr("stroke-width", "0.5")
+				.text(function (d) { return d.id });
+
+
+			node
 				.on("click", clickNode)
 				.on('mouseover', mouseOver)
 				.call(d3.drag()
 					.on("start", dragstarted)
 					.on("drag", dragged)
 					.on("end", dragended));
-
-			node.append("title")
-				.text(function (d) { return d.id; });
 
 			simulation
 				.nodes(nodes)
@@ -85,16 +102,34 @@ export default class Graph extends Component {
 				link.attr("d", positionLink);
 				node.attr("transform", positionNode);
 			}
-			
+
+			function dragstarted(d) {
+				simulation.stop();
+			}
+
+			function dragged(d) {
+				d.px += d3.event.dx;
+				d.py += d3.event.dy;
+				d.x += d3.event.dx;
+				d.y += d3.event.dy;
+				ticked();
+			}
+
+			function dragended(d) {
+				d.fixed = true;
+				ticked();
+				simulation.restart();
+			}
+
 		});
 
 		function clickNode() {
 			d3.select(this)
-				.style("fill","lightcoral")
-				.style("stroke","red");
+				.style("fill", "lightcoral")
+				.style("stroke", "red");
 		}
-		function mouseOver(){
-			d3.select(this).style('fill','black');
+		function mouseOver() {
+			d3.select(this).style('fill', 'black');
 		}
 		function positionLink(d) {
 			return "M" + d[0].x + "," + d[0].y
@@ -105,31 +140,18 @@ export default class Graph extends Component {
 		function positionNode(d) {
 			return "translate(" + d.x + "," + d.y + ")";
 		}
-
-		function dragstarted(d) {
-			if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-			d.fx = d.x;
-			d.fy = d.y;
-		}
-
-		function dragged(d) {
-			d.fx = d3.event.x;
-			d.fy = d3.event.y;
-		}
-
-		function dragended(d) {
-			d3.event.subject.active = false;
-			if (!d3.event.active) simulation.alphaTarget(0);
-			d.fx = null;
-			d.fy = null;
-		}
 	}
 
 	shouldComponentUpdate() {
 		// Prevents component re-rendering
 		return false;
 	}
-
+	resizeCanvas = () => {
+		this.setState({
+			width: window.innerWidth,
+			height: window.innerHeight
+		});
+	}
 	render() {
 		return (
 			<svg width={this.state.width} height={this.state.height}>

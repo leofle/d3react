@@ -13,3 +13,8 @@ html, body {
   fill: none;
   stroke: #bbb;
 }
+
+.nodetext { 
+  pointer-events: none;
+  font: 10px sans-serif;
+}
