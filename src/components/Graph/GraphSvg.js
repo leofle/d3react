@@ -17,8 +17,7 @@ export default class Graph extends Component {
 	componentDidMount() {
 		let svg = d3.select("svg"),
 			width = +svg.attr("width"),
-			height = +svg.attr("height"),
-			radius = 5;
+			height = +svg.attr("height");
 
 		// svg
 		// .attr("preserveAspectRatio", "xMinYMin meet")
