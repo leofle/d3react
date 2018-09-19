@@ -20,18 +20,12 @@ export default class Graph extends Component {
 			height = +svg.attr("height");
 
 		let zoomLayer = svg.select("g.container");
-		// svg
-		// .attr("preserveAspectRatio", "xMinYMin meet")
-		// .attr("viewBox", "0 0 960 900");
-
-		let color = scaleOrdinal()
-			.range(['green', 'blue', 'pink', 'red', 'black', 'yellow', 'orange', 'purple', 'cyan']);
-
+		let color = scaleOrdinal(d3.schemeSet3);
 
 		let simulation = d3.forceSimulation()
 		.force("link", d3.forceLink()
 			.id(function (d) { return d.id; }))
-		.force("charge", d3.forceManyBody().strength(-50))
+		.force("charge", d3.forceManyBody().strength(-70))
 		.force("center", d3.forceCenter(width / 2, height / 2));
 
 		let zoomed = function() {
