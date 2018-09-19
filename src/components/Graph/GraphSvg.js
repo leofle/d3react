@@ -29,14 +29,10 @@ export default class Graph extends Component {
 
 
 		let simulation = d3.forceSimulation()
-			.force("link", d3.forceLink()
-				.distance(10)
-				.strength(.05)
-				.id(function (d) { return d.id; }))
-			.force("charge", d3.forceManyBody().strength(-90))
-			.force("center", d3.forceCenter(width / 2, height / 2))
-			.force('collide', d3.forceCollide([radius])
-				.iterations(20));
+		.force("link", d3.forceLink()
+			.id(function (d) { return d.id; }))
+		.force("charge", d3.forceManyBody().strength(-50))
+		.force("center", d3.forceCenter(width / 2, height / 2));
 
 		d3.json("flare.json").then(graph => {
 
@@ -87,6 +83,7 @@ export default class Graph extends Component {
 				.on("click", clickNode)
 				.on('mouseover', mouseOver)
 				.call(d3.drag()
+					.subject(dragsubject)
 					.on("start", dragstarted)
 					.on("drag", dragged)
 					.on("end", dragended));
@@ -103,22 +100,23 @@ export default class Graph extends Component {
 				node.attr("transform", positionNode);
 			}
 
-			function dragstarted(d) {
-				simulation.stop();
+			function dragsubject() {
+				return simulation.find(d3.event.x, d3.event.y);
 			}
-
-			function dragged(d) {
-				d.px += d3.event.dx;
-				d.py += d3.event.dy;
-				d.x += d3.event.dx;
-				d.y += d3.event.dy;
-				ticked();
+	
+			function dragstarted() {
+				if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+				d3.event.subject.fx = d3.event.subject.x;
+				d3.event.subject.fy = d3.event.subject.y;
 			}
-
-			function dragended(d) {
-				d.fixed = true;
-				ticked();
-				simulation.restart();
+	
+			function dragged() {
+				d3.event.subject.fx = d3.event.x;
+				d3.event.subject.fy = d3.event.y;
+			}
+	
+			function dragended() {
+				d3.event.subject.active = false;
 			}
 
 		});
