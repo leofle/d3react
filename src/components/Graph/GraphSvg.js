@@ -19,6 +19,7 @@ export default class Graph extends Component {
 			width = +svg.attr("width"),
 			height = +svg.attr("height");
 
+		let zoomLayer = svg.select("g.container");
 		// svg
 		// .attr("preserveAspectRatio", "xMinYMin meet")
 		// .attr("viewBox", "0 0 960 900");
@@ -32,6 +33,10 @@ export default class Graph extends Component {
 			.id(function (d) { return d.id; }))
 		.force("charge", d3.forceManyBody().strength(-50))
 		.force("center", d3.forceCenter(width / 2, height / 2));
+
+		let zoomed = function() {
+			zoomLayer.attr("transform", d3.event.transform);
+		}
 
 		d3.json("flare.json").then(graph => {
 
@@ -50,32 +55,32 @@ export default class Graph extends Component {
 			});
 
 
-			let link = svg.select("g.links")
+			let link = zoomLayer.select("g.links")
 				.selectAll("link")
 				.data(bilinks)
 				.enter().append("path")
 				.attr("class", "link");
 
-			let node = svg.select("g.nodes")
+			let node = zoomLayer.select("g.nodes")
 				.selectAll("node")
-				.data(nodes.filter(function (d) { return d.id; }))
+				.data(nodes.filter(d =>d.id))
 				.enter().append("g");
 
 			node
 				.append("circle")
 				.attr("class", "node")
-				.attr("r", function (d) { return d.id.length })
-				.attr("fill", function (d) { return color(d.group); });
+				.attr("r", d => d.id.length)
+				.attr("fill", d => color(d.group));
 
 			node
 				.append("text")
 				.attr("class", "nodetext")
-				.attr("x", function (d) { return d.id.length * -2})
-				.attr("y", function (d) { return d.id.length * 2 + 5})
+				.attr("x", d => d.id.length * -2)
+				.attr("y", d=> d.id.length * 2 + 5)
 				.attr("text-achor", "middle")
 				.attr("stroke", '#000')
 				.attr("stroke-width", "0.5")
-				.text(function (d) { return d.id });
+				.text(d => d.id );
 
 
 			node
@@ -86,6 +91,10 @@ export default class Graph extends Component {
 					.on("start", dragstarted)
 					.on("drag", dragged)
 					.on("end", dragended));
+
+			svg.call(d3.zoom()
+			.scaleExtent([1 / 2, 12])
+			.on("zoom", zoomed));
 
 			simulation
 				.nodes(nodes)
@@ -152,8 +161,10 @@ export default class Graph extends Component {
 	render() {
 		return (
 			<svg width={this.state.width} height={this.state.height}>
+				<g className="container">
 				<Links />
 				<Nodes />
+				</g>
 			</svg>
 		)
 	}
