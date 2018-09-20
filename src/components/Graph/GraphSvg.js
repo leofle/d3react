@@ -25,7 +25,7 @@ export default class Graph extends Component {
 		let simulation = d3.forceSimulation()
 		.force("link", d3.forceLink()
 			.id(function (d) { return d.id; }))
-		.force("charge", d3.forceManyBody().strength(-70))
+		.force("charge", d3.forceManyBody().strength(-100))
 		.force("center", d3.forceCenter(width / 2, height / 2));
 
 		let zoomed = function() {
@@ -120,6 +120,7 @@ export default class Graph extends Component {
 	
 			function dragended() {
 				d3.event.subject.active = false;
+				if (!d3.event.active) simulation.alphaTarget(0);
 			}
 
 		});
