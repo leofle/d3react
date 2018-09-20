@@ -64,7 +64,8 @@ export default class Graph extends Component {
 				.append("circle")
 				.attr("class", "node")
 				.attr("r", d => d.id.length)
-				.attr("fill", d => color(d.group));
+				.attr("fill", d => color(d.group))
+				.attr("stroke", d => color(d.group));
 
 			node
 				.append("text")
@@ -73,7 +74,7 @@ export default class Graph extends Component {
 				.attr("y", d=> d.id.length * 2 + 5)
 				.attr("text-achor", "middle")
 				.attr("stroke", '#000')
-				.attr("stroke-width", "0.5")
+				.attr("stroke-width", .5)
 				.text(d => d.id );
 
 
