@@ -27,8 +27,8 @@ export default class Graph extends Component {
 			.id(function (d) { return d.id; }))
 		.force("charge", d3.forceManyBody().strength(-100))
 		.force("center", d3.forceCenter(width / 2, height / 2));
-
-		let zoomed = function() {
+		
+		let zoomed = function(){
 			zoomLayer.attr("transform", d3.event.transform);
 		}
 
@@ -65,7 +65,10 @@ export default class Graph extends Component {
 				.attr("class", "node")
 				.attr("r", d => d.id.length)
 				.attr("fill", d => color(d.group))
-				.attr("stroke", d => color(d.group));
+				.attr("stroke", d => color(d.group))
+				.on("click", clickNode)
+				.on('mouseover', mouseOver)
+				.on('mouseout', mouseOut);
 
 			node
 				.append("text")
@@ -79,8 +82,6 @@ export default class Graph extends Component {
 
 
 			node
-				.on("click", clickNode)
-				.on('mouseover', mouseOver)
 				.call(d3.drag()
 					.subject(dragsubject)
 					.on("start", dragstarted)
@@ -133,6 +134,10 @@ export default class Graph extends Component {
 		function mouseOver() {
 			d3.select(this).style('fill', 'black');
 		}
+		function mouseOut() {
+			d3.select(this).style('fill', d => color(d.group));
+			d3.select(this).style('stroke', d => color(d.group));
+		}
 		function positionLink(d) {
 			return "M" + d[0].x + "," + d[0].y
 				+ "S" + d[1].x + "," + d[1].y
@@ -155,11 +160,13 @@ export default class Graph extends Component {
 		});
 	}
 	render() {
+		let {width, height} = this.state;
+
 		return (
-			<svg width={this.state.width} height={this.state.height}>
+			<svg width={width} height={height}>
 				<g className="container">
-				<Links />
-				<Nodes />
+					<Links />
+					<Nodes />
 				</g>
 			</svg>
 		)
