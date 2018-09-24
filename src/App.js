@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import './App.css';
+import {StoreContext} from './store';
 import Graph from './components/Graph/GraphSvg';
 
 class App extends Component {
@@ -21,7 +22,9 @@ class App extends Component {
     const {graph} = this.state;
     return (
       <div className="App">
-          <Graph data={graph} />
+        <StoreContext.Provider value={graph}>
+          <Graph />
+        </StoreContext.Provider>
       </div>
     );
   }

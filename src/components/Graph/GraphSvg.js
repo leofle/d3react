@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import * as d3 from 'd3'
 import { scaleOrdinal } from 'd3-scale';
+import {StoreContext} from '../../store';
 import Links from './Links';
 import Nodes from './Nodes';
 
@@ -17,16 +18,17 @@ export default class Graph extends Component {
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
-		return nextProps.data.length !== this.props.data.length;
+		return false;
 	}
-	// If the data is not the same, re render
+	// // If the data is not the same, re render
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.data && nextProps.data.length !== 0) {
-			this.draw(nextProps.data)
+		if (StoreContext._currentValue && StoreContext._currentValue.length !== 0) {
+			this.draw()
 		}
 	}
 
-	draw(data) {
+	draw() {
+
 		let svg = d3.select("svg"),
 			width = +svg.attr("width"),
 			height = +svg.attr("height");
@@ -44,7 +46,7 @@ export default class Graph extends Component {
 			zoomLayer.attr("transform", d3.event.transform);
 		}
 
-		let graph = data;
+		let graph = StoreContext._currentValue;
 		let nodes = graph.nodes,
 			nodeById = d3.map(nodes, function (d) { return d.id; }),
 			links = graph.links,
