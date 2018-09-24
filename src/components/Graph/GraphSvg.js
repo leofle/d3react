@@ -27,7 +27,7 @@ export default class Graph extends Component {
 			.id(function (d) { return d.id; }))
 		.force("charge", d3.forceManyBody().strength(-100))
 		.force("center", d3.forceCenter(width / 2, height / 2));
-		
+
 		let zoomed = function(){
 			zoomLayer.attr("transform", d3.event.transform);
 		}
@@ -163,7 +163,7 @@ export default class Graph extends Component {
 		let {width, height} = this.state;
 
 		return (
-			<svg width={width} height={height}>
+			<svg style={{width: '100%', height: '100vh'}} width={width} height={height}>
 				<g className="container">
 					<Links />
 					<Nodes />
