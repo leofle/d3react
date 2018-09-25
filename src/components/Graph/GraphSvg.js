@@ -5,7 +5,7 @@ import {StoreContext} from '../../store';
 import Links from './Links';
 import Nodes from './Nodes';
 
-export default class Graph extends Component {
+export default class GraphSvg extends Component {
 
 	constructor(props) {
 		super(props);
@@ -160,17 +160,21 @@ export default class Graph extends Component {
 			return "translate(" + d.x + "," + d.y + ")";
 		}
 	}
-
+	
 	render() {
-		let { width, height, graph} = this.state;
+		let { width, height} = this.state;
 
 		return (
+			<StoreContext.Consumer>
+			{(context) =>
 			<svg style={{ width: '100%', height: '100vh' }} width={width} height={height}>
 				<g className="container">
-					<Links data={graph.links} />
-					<Nodes data={graph.nodes} />
+					<Links data={context.links}/>
+					<Nodes data={context.nodes} />
 				</g>
 			</svg>
+			}
+			</StoreContext.Consumer>
 		)
 	}
 }
