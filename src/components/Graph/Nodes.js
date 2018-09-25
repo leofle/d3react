@@ -8,7 +8,7 @@ export default class Nodes extends Component {
 			nodes: []
 		}
 	}
-	componentWillReceiveProps(nextProps) {
+	UNSAFE_componentWillReceiveProps(nextProps) {
 		if (nextProps.data && nextProps.data.length !== 0) {
 			this.setState({nodes: nextProps.data})
 		}

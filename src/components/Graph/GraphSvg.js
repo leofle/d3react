@@ -21,7 +21,7 @@ export default class GraphSvg extends Component {
 		return false;
 	}
 	// // If the data is not the same, re render
-	componentWillReceiveProps(nextProps) {
+	UNSAFE_componentWillReceiveProps(nextProps) {
 		if (StoreContext._currentValue && StoreContext._currentValue.length !== 0) {
 			this.draw()
 		}

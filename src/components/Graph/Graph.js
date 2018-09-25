@@ -8,7 +8,7 @@ export default class Graph extends Component {
 		height: window.innerHeight
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 
 		window.addEventListener('resize', this.resizeCanvas, false);
 	}

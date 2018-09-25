@@ -13,7 +13,7 @@ class App extends Component {
       graph: {}
     }
   }
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		d3.json("flare.json").then(graph => {
 			return this.setState({graph});
 		});
