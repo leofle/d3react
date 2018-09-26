@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import * as d3 from 'd3'
-import './App.css'
+import './App.scss'
 import {StoreContext} from './store'
 import Header from './components/Header/Header'
 import Main from './components/Main/Main'
