@@ -1,11 +1,11 @@
 import React from 'react'
-import {Container, Title} from '../../styles'
+import {Card, Title} from '../../styles'
 
 const Home = () => (
-  <Container>
+  <Card>
     <Title>
       Welcome to React Graph YaY! <span role="img" aria-label="hands doing horns">🤘</span>
     </Title>
-  </Container>
+  </Card>
 )
 export default Home;
