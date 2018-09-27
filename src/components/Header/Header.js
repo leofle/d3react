@@ -1,14 +1,14 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import './Header.scss';
 
 const Header = () => (
   <header>
     <nav>
       <ul>
-        <li><Link to='/'>Home</Link></li>
-        <li><Link to='/graph'>Graph</Link></li>
-        <li><Link to='/graphsvg'>GraphSvg</Link></li>
+        <li><NavLink to='/' exact={true} activeClassName='is-active'>Home</NavLink></li>
+        <li><NavLink to='/graph' exact={true} activeClassName="is-active">Graph</NavLink></li>
+        <li><NavLink to='/graphsvg' exact={true} activeClassName="is-active">GraphSvg</NavLink></li>
       </ul>
     </nav>
   </header>
