@@ -28,7 +28,7 @@ export default class GraphSvg extends Component {
 	}
 
 	draw() {
-
+		console.log(StoreContext._currentValue.state)
 		let svg = d3.select("svg"),
 			width = +svg.attr("width"),
 			height = +svg.attr("height");
@@ -46,7 +46,7 @@ export default class GraphSvg extends Component {
 			zoomLayer.attr("transform", d3.event.transform);
 		}
 
-		let graph = StoreContext._currentValue;
+		let graph = StoreContext._currentValue.state.graph;
 		let nodes = graph.nodes,
 			nodeById = d3.map(nodes, function (d) { return d.id; }),
 			links = graph.links,

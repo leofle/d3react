@@ -10,7 +10,8 @@ class App extends Component {
     super(props);
 
     this.state = {
-      graph: {}
+      graph: {},
+      msg: ''
     }
   }
 	UNSAFE_componentWillMount() {
@@ -20,10 +21,14 @@ class App extends Component {
 	}
 
   render() {
-    const {graph} = this.state;
     return (
       <div className="App">
-        <StoreContext.Provider value={graph}>
+        <StoreContext.Provider value={{
+          state: this.state,
+          changeText: (event) => {
+            this.setState({msg: event.target.value})
+          },
+        }}>
           <Header/>
           <Main/>
         </StoreContext.Provider>
