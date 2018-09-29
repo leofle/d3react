@@ -27,4 +27,17 @@ const Card = styled.div`
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
 `;
 
-export {Body, Container, Title, Card};
+const Input = styled.input`
+		height: 38px;
+		border-radius: 8px;
+		border: 1px solid #ccc;
+		width: calc(100% - 134px);
+		line-height: 1.5;
+		font-size: 18px;
+		padding: 0 5px;
+		&:focus {
+			outline:none;
+		}
+`;
+
+export {Body, Container, Title, Card, Input};
