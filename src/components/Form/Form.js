@@ -5,7 +5,7 @@ const Form = () => (
   <StoreContext.Consumer>
 		{({changeText}) => (
 		<Fragment>
-			<label>Change the title</label>
+			<label>Change the title </label>
 			<input type="text" 
 				name="title"
 				onChange={changeText}
