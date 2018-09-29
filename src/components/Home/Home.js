@@ -1,17 +1,18 @@
 import React, {Fragment} from 'react'
 import {StoreContext} from '../../store'
 import Form from '../Form/Form'
-import {Card, Title} from '../../styles'
+import {Card, CardFlex, Title} from '../../styles'
 
 const Home = () => (
   <StoreContext.Consumer>
     {({state})=> (
       <Fragment>
-        <Card>
+        <CardFlex>
           <Title>
-            {state.msg || 'Welcome to React Graph YaY!'} <span role="img" aria-label="hands doing horns">🤘</span>
+            {state.msg || 'Welcome to React Graph YaY!'}
           </Title>
-        </Card>
+          <img src="./favicon.ico" width="20px" alt="react logo"/>
+        </CardFlex>
         <Card>
           <Form/>
         </Card>
