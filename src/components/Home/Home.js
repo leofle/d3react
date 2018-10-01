@@ -1,5 +1,6 @@
 import React, {Fragment} from 'react'
 import {StoreContext} from '../../store'
+import DonutChart from '../Graph/Donut'
 import Form from '../Form/Form'
 import {Card, CardFlex, Title} from '../../styles'
 
@@ -15,6 +16,9 @@ const Home = () => (
         </CardFlex>
         <Card>
           <Form/>
+        </Card>
+        <Card>
+          <DonutChart/>
         </Card>
       </Fragment>
     )
